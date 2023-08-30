@@ -4,6 +4,39 @@
   
     
     <entry>
+      <title>SpringCloud-Ribbon</title>
+      <link href="/2023/08/30/SpringCloud-Ribbon/"/>
+      <url>/2023/08/30/SpringCloud-Ribbon/</url>
+      
+        <content type="html"><![CDATA[<h3 id="Ribbon负载均衡流程"><a href="#Ribbon负载均衡流程" class="headerlink" title="Ribbon负载均衡流程"></a>Ribbon负载均衡流程</h3><p>像这样的url：<a href="http://userservice/user/1">http://userservice/user/1</a> 是没有办法通过http访问的，因为实际上不存在这么一个网站，因此Ribbon起到一个请求拦截处理的作用</p><ol><li><p>收到请求后，向Eureka拉取服务</p></li><li><p>返回服务列表，进行负载均衡，轮询获取具体服务端口</p></li></ol><p>具体操作需要在xxx-service模块中的xxxServiceApplication中将RestTemplate注入spring容器</p><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Bean</span></span><br><span class="line"><span class="meta">@LoadBalanced</span></span><br><span class="line"><span class="keyword">public</span> RestTemplate <span class="title function_">restTemplate</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">RestTemplate</span>();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><h3 id="Ribbon底层"><a href="#Ribbon底层" class="headerlink" title="Ribbon底层"></a>Ribbon底层</h3><ol><li>LoadBalancerInterceptor拦截http请求，将请求解析得到服务名称</li><li>将服务名称交给RibbonLoadBalancerClient</li><li>RibbonLoadBalancerClient通过DynamicServerListLoadBalancer向eureka拉取服务列表</li><li>DynamicServerListLoadBalancer通过负载均衡策略IRule从服务列表中进行选择，提交给RibbonLoadBalancerClient</li><li>RibbonLoadBalancerClient对url进行修改，发起请求</li></ol><h3 id="负载均衡策略"><a href="#负载均衡策略" class="headerlink" title="负载均衡策略"></a>负载均衡策略</h3><p><img src="https://s2.loli.net/2023/08/30/Vc82tw4vB5gkmPi.png" alt="image-20230830184232870.png"></p><h4 id="修改策略"><a href="#修改策略" class="headerlink" title="修改策略"></a>修改策略</h4><ol><li>通过在相关服务中将IRule注入spring容器实现对负载均衡策略的修改，例如xxx-service模块中的xxxServiceApplication中（本身也算是配置类）</li></ol><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Bean</span></span><br><span class="line"><span class="keyword">public</span> IRule <span class="title function_">randomRule</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">RandomRule</span>();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><ol start="2"><li>配置文件的方式，在xxx-service模块中的yml配置中添加</li></ol><figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">userservice:</span></span><br><span class="line">  <span class="attr">ribbon:</span></span><br><span class="line">    <span class="attr">NFLoadBalancerRuleClassName:</span> <span class="string">com.magus.config.RandomRule</span> <span class="comment"># 规则类的名称</span></span><br></pre></td></tr></table></figure><h3 id="饥饿加载"><a href="#饥饿加载" class="headerlink" title="饥饿加载"></a>饥饿加载</h3><p>Ribbon默认是懒加载，第一次访问才会创建LoadBalancerClient，请求时间较长。使用饥饿加载可以在服务启动时就创建，减少请求时间</p><figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">ribbon:</span></span><br><span class="line">  <span class="attr">eager-load:</span></span><br><span class="line">    <span class="attr">enabled:</span> <span class="literal">true</span></span><br><span class="line">    <span class="attr">clients:</span> <span class="string">userservice</span> <span class="comment"># 单个服务</span></span><br><span class="line">    <span class="attr">clients:</span> <span class="comment"># 多个服务</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">userservice</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">orderservice</span></span><br></pre></td></tr></table></figure>]]></content>
+      
+      
+      <categories>
+          
+          <category> Java </category>
+          
+          <category> SpringCloud </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> SpringCloud </tag>
+            
+            <tag> 微服务 </tag>
+            
+            <tag> Ribbon </tag>
+            
+            <tag> 负载均衡 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>SpringCloud-Eureka</title>
       <link href="/2023/08/30/SpringCloud-Eureka/"/>
       <url>/2023/08/30/SpringCloud-Eureka/</url>
@@ -40,19 +73,6 @@
       <url>/2023/08/29/MyFirstBlog/</url>
       
         <content type="html"><![CDATA[<h2 id="MyFirstBlog"><a href="#MyFirstBlog" class="headerlink" title="MyFirstBlog"></a>MyFirstBlog</h2><p>2023年8月29日正式搭建属于我的博客，希望有一天我也能写出像hexo一样能被百万人使用的project</p>]]></content>
-      
-      
-      
-    </entry>
-    
-    
-    
-    <entry>
-      <title>Hello World</title>
-      <link href="/2023/08/29/hello-world/"/>
-      <url>/2023/08/29/hello-world/</url>
-      
-        <content type="html"><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p><span id="more"></span><h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p><h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p><h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p><h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>]]></content>
       
       
       
