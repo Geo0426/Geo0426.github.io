@@ -4,31 +4,6 @@
   
     
     <entry>
-      <title>Unity学习日志</title>
-      <link href="/2024/06/12/Unity%E5%AD%A6%E4%B9%A0%E6%97%A5%E5%BF%97/"/>
-      <url>/2024/06/12/Unity%E5%AD%A6%E4%B9%A0%E6%97%A5%E5%BF%97/</url>
-      
-        <content type="html"><![CDATA[<h2 id="摄像机"><a href="#摄像机" class="headerlink" title="摄像机"></a>摄像机</h2><p>相机投影分为透视和正交，透视就是近大远小，一般3D游戏都会使用；正交一般用于2D开发，不分大小。</p><p>多个相机融合使用，可以将清除标志设置为仅深度，可以将多个相机拍摄到的场景进行融合。</p><p>通过裁剪平面调整近面和远面，可以调整相机的拍摄范围大小。</p><p>修改相机的目标纹理，可以让相机渲染画面被渲染到目标纹理中，可以类似监控的方式赋给其他物体。</p>]]></content>
-      
-      
-      <categories>
-          
-          <category> Unity </category>
-          
-      </categories>
-      
-      
-        <tags>
-            
-            <tag> Unity </tag>
-            
-        </tags>
-      
-    </entry>
-    
-    
-    
-    <entry>
       <title>C#脚本学习日志</title>
       <link href="/2024/06/06/C#%E8%84%9A%E6%9C%AC%E5%AD%A6%E4%B9%A0%E6%97%A5%E5%BF%97/"/>
       <url>/2024/06/06/C#%E8%84%9A%E6%9C%AC%E5%AD%A6%E4%B9%A0%E6%97%A5%E5%BF%97/</url>
