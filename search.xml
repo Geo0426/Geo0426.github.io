@@ -4,6 +4,31 @@
   
     
     <entry>
+      <title>算法题</title>
+      <link href="/2024/10/09/%E5%88%B7%E9%A2%98%E8%AE%B0%E5%BD%95/"/>
+      <url>/2024/10/09/%E5%88%B7%E9%A2%98%E8%AE%B0%E5%BD%95/</url>
+      
+        <content type="html"><![CDATA[<h1 id="算法题"><a href="#算法题" class="headerlink" title="算法题"></a>算法题</h1><h2 id="48-旋转矩阵"><a href="#48-旋转矩阵" class="headerlink" title="48 旋转矩阵"></a>48 旋转矩阵</h2><h3 id="题干："><a href="#题干：" class="headerlink" title="题干："></a>题干：</h3><p>给定一个 <em>n</em> × <em>n</em> 的二维矩阵 <code>matrix</code> 表示一个图像。请你将图像顺时针旋转 90 度。</p><p>你必须在**<a href="https://baike.baidu.com/item/%E5%8E%9F%E5%9C%B0%E7%AE%97%E6%B3%95"> 原地</a>** 旋转图像，这意味着你需要直接修改输入的二维矩阵。<strong>请不要</strong> 使用另一个矩阵来旋转图像。</p><p><strong>示例 1：</strong></p><p><img src="https://assets.leetcode.com/uploads/2020/08/28/mat1.jpg" alt="img"></p><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">输入：matrix = [[1,2,3],[4,5,6],[7,8,9]]</span><br><span class="line">输出：[[7,4,1],[8,5,2],[9,6,3]]</span><br></pre></td></tr></table></figure><p><strong>示例 2：</strong></p><p><img src="https://assets.leetcode.com/uploads/2020/08/28/mat2.jpg" alt="img"></p><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">输入：matrix = [[5,1,9,11],[2,4,8,10],[13,3,6,7],[15,14,12,16]]</span><br><span class="line">输出：[[15,13,2,5],[14,3,4,1],[12,6,8,9],[16,7,10,11]]</span><br></pre></td></tr></table></figure><h3 id="题解"><a href="#题解" class="headerlink" title="题解"></a>题解</h3><p>思路：</p><p>问题转换成矩阵左上角进行旋转，每一次交换4个数据的位置，增加一个中间临时变量来完成交换。</p><p>问题关键在于左上角的定义，偶数不用赘述；矩阵边长为奇数时，取前n &#x2F; 2行，前(n + 1) &#x2F; 2列。以示例1为例，即(1, 2)视作左上角的矩阵。</p><p>实现：</p><p>实现时要思考清楚矩阵中的交换元素，可以结合实例去验证判断。最终是交换matrix [i] [j]和matrix [n - j -1] [i]，接下来把n - j -1代入i，i代入j得到后续的交换下标即可。</p><p>代码：</p><figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">rotate</span><span class="params">(vector&lt;vector&lt;<span class="type">int</span>&gt;&gt;&amp; matrix)</span> </span>&#123;</span><br><span class="line">    <span class="type">int</span> n = matrix.<span class="built_in">size</span>();</span><br><span class="line">    <span class="type">int</span> row = n / <span class="number">2</span>;</span><br><span class="line">    <span class="type">int</span> col = (n + <span class="number">1</span>) / <span class="number">2</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; row; i++) &#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> j = <span class="number">0</span>; j &lt; col; j++) &#123;</span><br><span class="line">            <span class="type">int</span> temp = matrix[i][j];</span><br><span class="line">            matrix[i][j] = matrix[n - j <span class="number">-1</span>][i];</span><br><span class="line">            matrix[n - j - <span class="number">1</span>][i] = matrix[n - i <span class="number">-1</span>][n - j - <span class="number">1</span>];</span><br><span class="line">            matrix[n - i <span class="number">-1</span>][n - j - <span class="number">1</span>] = matrix[j][n - i <span class="number">-1</span>];</span><br><span class="line">            matrix[j][n - i <span class="number">-1</span>]= temp;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>]]></content>
+      
+      
+      <categories>
+          
+          <category> 算法题 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> C++ </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>C#脚本学习日志</title>
       <link href="/2024/06/06/Csharp%E8%84%9A%E6%9C%AC%E5%AD%A6%E4%B9%A0%E6%97%A5%E5%BF%97/"/>
       <url>/2024/06/06/Csharp%E8%84%9A%E6%9C%AC%E5%AD%A6%E4%B9%A0%E6%97%A5%E5%BF%97/</url>
