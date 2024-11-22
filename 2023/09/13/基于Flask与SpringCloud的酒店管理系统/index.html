@@ -1,0 +1,714 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>基于Flask与SpringCloud的酒店管理系统 | Geo0426</title><meta name="author" content="Geo0426"><meta name="copyright" content="Geo0426"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="前言一、前言本项目用于辅助SpringCloud相关技术的学习，通过代码实践进行学习。 二、设计经过对SpringCloud的基础知识学习后，希望将它应用到酒店管理系统这个项目中去。我的规划如下：  在功能需求已知的情况下，分析并将业务拆解成多个模块实现微服务架构 进行初步的实体类设计，数据库设计 优先使用已掌握技能完成基础功能模块，如处理秒杀库存暂时不考虑使用分布式锁，目前计划使用synchro">
+<meta property="og:type" content="article">
+<meta property="og:title" content="基于Flask与SpringCloud的酒店管理系统">
+<meta property="og:url" content="http://geo0426.github.io/2023/09/13/%E5%9F%BA%E4%BA%8EFlask%E4%B8%8ESpringCloud%E7%9A%84%E9%85%92%E5%BA%97%E7%AE%A1%E7%90%86%E7%B3%BB%E7%BB%9F/index.html">
+<meta property="og:site_name" content="Geo0426">
+<meta property="og:description" content="前言一、前言本项目用于辅助SpringCloud相关技术的学习，通过代码实践进行学习。 二、设计经过对SpringCloud的基础知识学习后，希望将它应用到酒店管理系统这个项目中去。我的规划如下：  在功能需求已知的情况下，分析并将业务拆解成多个模块实现微服务架构 进行初步的实体类设计，数据库设计 优先使用已掌握技能完成基础功能模块，如处理秒杀库存暂时不考虑使用分布式锁，目前计划使用synchro">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://s2.loli.net/2023/09/13/qO2EQMvgHlJyaWj.png">
+<meta property="article:published_time" content="2023-09-13T08:31:11.000Z">
+<meta property="article:modified_time" content="2024-11-22T08:19:20.299Z">
+<meta property="article:author" content="Geo0426">
+<meta property="article:tag" content="SpringCloud">
+<meta property="article:tag" content="Flask">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://s2.loli.net/2023/09/13/qO2EQMvgHlJyaWj.png"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://geo0426.github.io/2023/09/13/%E5%9F%BA%E4%BA%8EFlask%E4%B8%8ESpringCloud%E7%9A%84%E9%85%92%E5%BA%97%E7%AE%A1%E7%90%86%E7%B3%BB%E7%BB%9F/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":-1,"unescape":false,"languages":{"hits_empty":"找不到您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '基于Flask与SpringCloud的酒店管理系统',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2024-11-22 16:19:20'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+    win.getCSS = (url,id = false) => new Promise((resolve, reject) => {
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.href = url
+      if (id) link.id = id
+      link.onerror = reject
+      link.onload = link.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        link.onload = link.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(link)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.3.0"></head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/avater.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">14</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">18</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">9</div></a></div><hr class="custom-hr"/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fa fa-graduation-cap"></i><span> 博文</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></li><li><a class="site-page child" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></li></ul></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> 生活</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/photos/"><i class="fa-fw fa fa-camera-retro"></i><span> 相册</span></a></li><li><a class="site-page child" href="/music/"><i class="fa-fw fa fa-music"></i><span> 音乐</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/comment/"><i class="fa-fw fa fa-paper-plane"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于笔者</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="not-top-img" id="page-header"><nav id="nav"><span id="blog-info"><a href="/" title="Geo0426"><span class="site-name">Geo0426</span></a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search" href="javascript:void(0);"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fa fa-graduation-cap"></i><span> 博文</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></li><li><a class="site-page child" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></li></ul></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> 生活</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/photos/"><i class="fa-fw fa fa-camera-retro"></i><span> 相册</span></a></li><li><a class="site-page child" href="/music/"><i class="fa-fw fa fa-music"></i><span> 音乐</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/comment/"><i class="fa-fw fa fa-paper-plane"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于笔者</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav></header><main class="layout" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">基于Flask与SpringCloud的酒店管理系统</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-09-13T08:31:11.000Z" title="发表于 2023-09-13 16:31:11">2023-09-13</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2024-11-22T08:19:20.299Z" title="更新于 2024-11-22 16:19:20">2024-11-22</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Java/">Java</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E9%A1%B9%E7%9B%AE/">项目</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E9%A1%B9%E7%9B%AE/%E9%85%92%E5%BA%97%E7%AE%A1%E7%90%86%E7%B3%BB%E7%BB%9F/">酒店管理系统</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Python/">Python</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="基于Flask与SpringCloud的酒店管理系统"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div><article class="post-content" id="article-container"><h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><h1 id="一、前言"><a href="#一、前言" class="headerlink" title="一、前言"></a>一、前言</h1><p>本项目用于辅助SpringCloud相关技术的学习，通过代码实践进行学习。</p>
+<h1 id="二、设计"><a href="#二、设计" class="headerlink" title="二、设计"></a>二、设计</h1><p>经过对SpringCloud的基础知识学习后，希望将它应用到酒店管理系统这个项目中去。我的规划如下：</p>
+<ul>
+<li>在功能需求已知的情况下，分析并将业务拆解成多个模块实现微服务架构</li>
+<li>进行初步的实体类设计，数据库设计</li>
+<li>优先使用已掌握技能完成基础功能模块，如处理秒杀库存暂时不考虑使用分布式锁，目前计划使用synchronized解决</li>
+</ul>
+<p>当前阻力：</p>
+<ul>
+<li>前端设计</li>
+<li>用户权限控制管理这块没有系统的学习，只能基础的使用JWT进行token解析</li>
+<li>Flask框架并没有实际上手写过，也并没有使用Python进行过与数据库交互的项目开发，没有编写过脚本</li>
+<li>消息中间件没有过多实际编码经验，尚无法确认能否顺利投入到项目使用中</li>
+</ul>
+<p>理想状态：</p>
+<ul>
+<li><input checked="" disabled="" type="checkbox"> 能够熟练的使用SpringCloud对项目各个服务模块进行开发</li>
+<li><input disabled="" type="checkbox"> 引入消息中间件来实现对高并发的支持，引入redis缓存来提高秒杀效率</li>
+<li><input disabled="" type="checkbox"> 补充SpringSecurity知识，对权限认证进行完善</li>
+</ul>
+<hr>
+<p>2023.09.13</p>
+<p>redis和SpringSecurity在后续学习的时候再用于这个项目</p>
+<p>2024.11.22</p>
+<p>把我自己都看笑了，太能🕊了</p>
+<hr>
+<h2 id="模块设计"><a href="#模块设计" class="headerlink" title="模块设计"></a>模块设计</h2><p>仅针对Java部分的SpringCloud微服务设计</p>
+<ol>
+<li>用户管理模块：负责处理用户的注册、登录、基本信息维护等功能。</li>
+<li>酒店信息管理模块：负责处理酒店列表、基本信息、细节信息的维护等功能。</li>
+<li>订单管理模块：负责处理用户预定的订单，包括浏览订单等功能。</li>
+<li>管理员客户管理模块：负责帮助客户重置密码，生成新的随机密码，删除用户</li>
+</ol>
+<h2 id="UML"><a href="#UML" class="headerlink" title="UML"></a>UML</h2><p>针对酒店管理系统的业务进行数据库设计和类图的设计</p>
+<h3 id="数据库设计"><a href="#数据库设计" class="headerlink" title="数据库设计"></a>数据库设计</h3><h4 id="t-user"><a href="#t-user" class="headerlink" title="t_user"></a>t_user</h4><table>
+<thead>
+<tr>
+<th align="center">字段名</th>
+<th align="center">类型</th>
+<th align="center">长度</th>
+<th align="center">注释</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">id</td>
+<td align="center">int</td>
+<td align="center"></td>
+<td align="center">用户id</td>
+</tr>
+<tr>
+<td align="center">username</td>
+<td align="center">varchar</td>
+<td align="center">255</td>
+<td align="center">用户名</td>
+</tr>
+<tr>
+<td align="center">password</td>
+<td align="center">varchar</td>
+<td align="center">255</td>
+<td align="center">密码</td>
+</tr>
+<tr>
+<td align="center">salt</td>
+<td align="center">varchar</td>
+<td align="center">255</td>
+<td align="center">盐值</td>
+</tr>
+<tr>
+<td align="center">sex</td>
+<td align="center">int</td>
+<td align="center"></td>
+<td align="center">性别(女0，男1)</td>
+</tr>
+<tr>
+<td align="center">type</td>
+<td align="center">int</td>
+<td align="center"></td>
+<td align="center">类型(0未成年人，1成年人)</td>
+</tr>
+<tr>
+<td align="center">identity</td>
+<td align="center">int</td>
+<td align="center"></td>
+<td align="center">身份(0为普通用户，1为用户管理员，2为酒店管理人员，3为酒店管理员)</td>
+</tr>
+<tr>
+<td align="center">idcn</td>
+<td align="center">char</td>
+<td align="center">18</td>
+<td align="center">身份证号码</td>
+</tr>
+<tr>
+<td align="center">real_name</td>
+<td align="center">varchar</td>
+<td align="center">255</td>
+<td align="center">真实姓名</td>
+</tr>
+<tr>
+<td align="center">phone</td>
+<td align="center">varchar</td>
+<td align="center">255</td>
+<td align="center">电话号码</td>
+</tr>
+<tr>
+<td align="center">email</td>
+<td align="center">varchar</td>
+<td align="center">255</td>
+<td align="center">邮箱</td>
+</tr>
+<tr>
+<td align="center">created_at</td>
+<td align="center">datetime</td>
+<td align="center"></td>
+<td align="center">创建时间</td>
+</tr>
+<tr>
+<td align="center">updated_at</td>
+<td align="center">datetime</td>
+<td align="center"></td>
+<td align="center">修改时间</td>
+</tr>
+</tbody></table>
+<h4 id="t-hotel"><a href="#t-hotel" class="headerlink" title="t_hotel"></a>t_hotel</h4><table>
+<thead>
+<tr>
+<th align="center">字段名</th>
+<th align="center">类型</th>
+<th align="center">长度</th>
+<th align="center">注释</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">id</td>
+<td align="center">int</td>
+<td align="center"></td>
+<td align="center">用户id</td>
+</tr>
+<tr>
+<td align="center">name</td>
+<td align="center">varchar</td>
+<td align="center">255</td>
+<td align="center">酒店名称</td>
+</tr>
+<tr>
+<td align="center">address</td>
+<td align="center">varchar</td>
+<td align="center">255</td>
+<td align="center">酒店地址</td>
+</tr>
+<tr>
+<td align="center">introduction</td>
+<td align="center">varchar</td>
+<td align="center">255</td>
+<td align="center">酒店介绍</td>
+</tr>
+<tr>
+<td align="center">phone</td>
+<td align="center">varchar</td>
+<td align="center"></td>
+<td align="center">联系方式</td>
+</tr>
+<tr>
+<td align="center">stars</td>
+<td align="center">int</td>
+<td align="center"></td>
+<td align="center">星级</td>
+</tr>
+<tr>
+<td align="center">brand</td>
+<td align="center">varchar</td>
+<td align="center">255</td>
+<td align="center">品牌</td>
+</tr>
+<tr>
+<td align="center">business_district</td>
+<td align="center">varchar</td>
+<td align="center">255</td>
+<td align="center">所属商圈</td>
+</tr>
+<tr>
+<td align="center">created_at</td>
+<td align="center">datetime</td>
+<td align="center"></td>
+<td align="center">创建时间</td>
+</tr>
+<tr>
+<td align="center">updated_at</td>
+<td align="center">datetime</td>
+<td align="center"></td>
+<td align="center">修改时间</td>
+</tr>
+</tbody></table>
+<h4 id="t-order"><a href="#t-order" class="headerlink" title="t_order"></a>t_order</h4><table>
+<thead>
+<tr>
+<th align="center">字段名</th>
+<th align="center">类型</th>
+<th align="center">长度</th>
+<th align="center">注释</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">id</td>
+<td align="center">int</td>
+<td align="center"></td>
+<td align="center">订单id</td>
+</tr>
+<tr>
+<td align="center">user_id</td>
+<td align="center">int</td>
+<td align="center">255</td>
+<td align="center">用户id</td>
+</tr>
+<tr>
+<td align="center">room_id</td>
+<td align="center">int</td>
+<td align="center">255</td>
+<td align="center">房间id</td>
+</tr>
+<tr>
+<td align="center">check_in_date</td>
+<td align="center">datetime</td>
+<td align="center">255</td>
+<td align="center">入住日期</td>
+</tr>
+<tr>
+<td align="center">check_out_date</td>
+<td align="center">datetime</td>
+<td align="center"></td>
+<td align="center">退房日期</td>
+</tr>
+<tr>
+<td align="center">room_num</td>
+<td align="center">int</td>
+<td align="center"></td>
+<td align="center">房间数量</td>
+</tr>
+<tr>
+<td align="center">expected_guest_num</td>
+<td align="center">int</td>
+<td align="center"></td>
+<td align="center">预期入住人数</td>
+</tr>
+<tr>
+<td align="center">has_children</td>
+<td align="center">int</td>
+<td align="center">18</td>
+<td align="center">是否有儿童（0无1有）</td>
+</tr>
+<tr>
+<td align="center">status</td>
+<td align="center">int</td>
+<td align="center">255</td>
+<td align="center">订单状态（0未支付，1已支付，2已取消）</td>
+</tr>
+<tr>
+<td align="center">price</td>
+<td align="center">decimal</td>
+<td align="center">255</td>
+<td align="center">订单价格</td>
+</tr>
+<tr>
+<td align="center">created_at</td>
+<td align="center">datetime</td>
+<td align="center"></td>
+<td align="center">创建时间</td>
+</tr>
+<tr>
+<td align="center">updated_at</td>
+<td align="center">datetime</td>
+<td align="center"></td>
+<td align="center">修改时间</td>
+</tr>
+</tbody></table>
+<h4 id="t-room"><a href="#t-room" class="headerlink" title="t_room"></a>t_room</h4><table>
+<thead>
+<tr>
+<th align="center">字段名</th>
+<th align="center">类型</th>
+<th align="center">长度</th>
+<th align="center">注释</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">id</td>
+<td align="center">int</td>
+<td align="center"></td>
+<td align="center">房间id</td>
+</tr>
+<tr>
+<td align="center">hotel_id</td>
+<td align="center">int</td>
+<td align="center"></td>
+<td align="center">所属酒店id</td>
+</tr>
+<tr>
+<td align="center">num</td>
+<td align="center">int</td>
+<td align="center"></td>
+<td align="center">剩余数量</td>
+</tr>
+<tr>
+<td align="center">type</td>
+<td align="center">varchar</td>
+<td align="center">255</td>
+<td align="center">房间类型（0单人间，1双床房，2大床房）</td>
+</tr>
+<tr>
+<td align="center">original_price</td>
+<td align="center">decimal</td>
+<td align="center"></td>
+<td align="center">原价</td>
+</tr>
+<tr>
+<td align="center">price</td>
+<td align="center">decimal</td>
+<td align="center"></td>
+<td align="center">当前价格</td>
+</tr>
+<tr>
+<td align="center">created_at</td>
+<td align="center">datetime</td>
+<td align="center"></td>
+<td align="center">创建时间</td>
+</tr>
+<tr>
+<td align="center">updated_at</td>
+<td align="center">datetime</td>
+<td align="center"></td>
+<td align="center">修改时间</td>
+</tr>
+</tbody></table>
+<h4 id="t-facilities"><a href="#t-facilities" class="headerlink" title="t_facilities"></a>t_facilities</h4><table>
+<thead>
+<tr>
+<th align="center">字段名</th>
+<th align="center">类型</th>
+<th align="center">长度</th>
+<th align="center">注释</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">id</td>
+<td align="center">int</td>
+<td align="center"></td>
+<td align="center">设施id</td>
+</tr>
+<tr>
+<td align="center">name</td>
+<td align="center">varchar</td>
+<td align="center">255</td>
+<td align="center">设施名称</td>
+</tr>
+<tr>
+<td align="center">is_free</td>
+<td align="center">int</td>
+<td align="center"></td>
+<td align="center">是否免费(0付费，1免费)</td>
+</tr>
+<tr>
+<td align="center">created_at</td>
+<td align="center">datetime</td>
+<td align="center"></td>
+<td align="center">创建时间</td>
+</tr>
+<tr>
+<td align="center">updated_at</td>
+<td align="center">datetime</td>
+<td align="center"></td>
+<td align="center">修改时间</td>
+</tr>
+</tbody></table>
+<h4 id="t-hotel-facilities"><a href="#t-hotel-facilities" class="headerlink" title="t_hotel_facilities"></a>t_hotel_facilities</h4><table>
+<thead>
+<tr>
+<th align="center">字段名</th>
+<th align="center">类型</th>
+<th align="center">长度</th>
+<th align="center">注释</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">id</td>
+<td align="center">int</td>
+<td align="center"></td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center">hotel_id</td>
+<td align="center">int</td>
+<td align="center"></td>
+<td align="center">酒店id</td>
+</tr>
+<tr>
+<td align="center">facilities_id</td>
+<td align="center">int</td>
+<td align="center"></td>
+<td align="center">设施id</td>
+</tr>
+<tr>
+<td align="center">created_at</td>
+<td align="center">datetime</td>
+<td align="center"></td>
+<td align="center">创建时间</td>
+</tr>
+<tr>
+<td align="center">updated_at</td>
+<td align="center">datetime</td>
+<td align="center"></td>
+<td align="center">修改时间</td>
+</tr>
+</tbody></table>
+<hr>
+<p>2023.09.13</p>
+<p>t_facilities设计有问题，is_free字段应该放在t_hotel_facilities中而不是t_facilities中；其次为用户增加了一个hotel_id的字段，提供给酒店管理人员标识其管理的酒店</p>
+<hr>
+<h3 id="类图"><a href="#类图" class="headerlink" title="类图"></a>类图</h3><p>有机会再补吧，先🕊了</p>
+<p>2023.09.13</p>
+<p>不会再补了，彻底🕊了</p>
+<hr>
+<h1 id="三-、用户模块"><a href="#三-、用户模块" class="headerlink" title="三 、用户模块"></a>三 、用户模块</h1><h2 id="权限认证"><a href="#权限认证" class="headerlink" title="权限认证"></a>权限认证</h2><p>以前写项目的时候根本没有怎么考虑过权限问题，很简单的做了一个token验证就结束了，现在自己开始考虑到这些问题发现自己根本想不到什么好的解决方案。</p>
+<p>首先担心的是同角色之间资源的相互访问问题，也许可以通过验证用户的角色身份来解决一部分问题，但是如果同角色试图访问其他用户的资源，不对token中的用户id进行解析是没法解决的。这样的话我在Gateway的微服务中还需要添加与数据库的连接，我不知道是不是必须如此…我主观上是这么想的，确实想不到更优雅的办法，但是感觉这样子会很笨。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Order(-1)</span></span><br><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">AuthorizationFilter</span> <span class="keyword">implements</span> <span class="title class_">GlobalFilter</span> &#123;</span><br><span class="line"></span><br><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">   *</span></span><br><span class="line"><span class="comment">   * <span class="doctag">@param</span> exchange 包含请求头，请求体的信息</span></span><br><span class="line"><span class="comment">   * <span class="doctag">@param</span> chain 过滤器链，若通过过滤器将其放行至下一个过滤器</span></span><br><span class="line"><span class="comment">   * <span class="doctag">@return</span> Mono类型的结果，若通过过滤器只需要返回chain.filter(exchange)即可</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  <span class="meta">@Override</span></span><br><span class="line">  <span class="keyword">public</span> Mono&lt;Void&gt; <span class="title function_">filter</span><span class="params">(ServerWebExchange exchange, GatewayFilterChain chain)</span> &#123;</span><br><span class="line">    <span class="comment">//  获取请求</span></span><br><span class="line">    <span class="type">ServerHttpRequest</span> <span class="variable">request</span> <span class="operator">=</span> exchange.getRequest();</span><br><span class="line">    <span class="comment">//  从请求中获取请求头</span></span><br><span class="line">    <span class="type">HttpHeaders</span> <span class="variable">headers</span> <span class="operator">=</span> request.getHeaders();</span><br><span class="line">    <span class="comment">//  请求路径</span></span><br><span class="line">    <span class="type">String</span> <span class="variable">requestPath</span> <span class="operator">=</span> request.getURI().getPath();</span><br><span class="line">    <span class="comment">//  判断是否需要核验token</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">//  需要token</span></span><br><span class="line">    <span class="keyword">if</span>(tokenShouldCheck(requestPath)) &#123;</span><br><span class="line">      <span class="comment">//  不包含token</span></span><br><span class="line">      <span class="keyword">if</span>(!headers.containsKey(<span class="string">&quot;Authorization&quot;</span>)) &#123;</span><br><span class="line">        <span class="comment">//  身份验证失败，设置状态码</span></span><br><span class="line">        <span class="type">ServerHttpResponse</span> <span class="variable">response</span> <span class="operator">=</span> exchange.getResponse();</span><br><span class="line">        <span class="comment">//  参数是HttpStatus类型的，未登录状态码为401</span></span><br><span class="line">        response.setStatusCode(HttpStatus.UNAUTHORIZED);</span><br><span class="line">        <span class="keyword">return</span> response.setComplete();</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="comment">//  核验token是否有效,以及用户权限能否获取资源</span></span><br><span class="line">      <span class="type">String</span> <span class="variable">token</span> <span class="operator">=</span> headers.getFirst(<span class="string">&quot;Authorization&quot;</span>);</span><br><span class="line">      <span class="type">Claims</span> <span class="variable">claims</span> <span class="operator">=</span> JwtUtils.getClaimsByToken(token);</span><br><span class="line">      <span class="comment">//  过期</span></span><br><span class="line">      <span class="keyword">if</span>(claims.getExpiration().getTime() &lt; <span class="keyword">new</span> <span class="title class_">Date</span>().getTime()) &#123;</span><br><span class="line">        <span class="comment">//  token过期，设置状态码</span></span><br><span class="line">        <span class="type">ServerHttpResponse</span> <span class="variable">response</span> <span class="operator">=</span> exchange.getResponse();</span><br><span class="line">        response.setStatusCode(HttpStatus.UNAUTHORIZED);</span><br><span class="line">        <span class="keyword">return</span> response.setComplete();</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="comment">//  没有过期，对权限进行验证  </span></span><br><span class="line">      <span class="keyword">else</span> &#123;</span><br><span class="line">          </span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//  传递给下一个过滤器</span></span><br><span class="line">    <span class="keyword">return</span> chain.filter(exchange);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">public</span> Boolean <span class="title function_">tokenShouldCheck</span><span class="params">(String path)</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> !path.equals(<span class="string">&quot;/users/login&quot;</span>) &amp;&amp; !path.equals(<span class="string">&quot;/users/register&quot;</span>);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>整段代码我只能说，和优雅是完全不沾边，感觉过滤器只学到了皮毛…</p>
+<hr>
+<p>2023&#x2F;09&#x2F;06</p>
+<p>在昨晚写下博客之后又自己捣鼓了好久，发现我确实学的不精…</p>
+<p>我最开始的思路是用feign来获取用户信息，但是我居然认为feign的远程调用要经过http，所以我放弃了这个想法。如果真是这样的话，那微服务中使用feign调用其他微服务来实现功能都没法成立了，毕竟你在实现中哪来的token（如果要做token验证）</p>
+<p>于是使用feign解决了，但是确实不算优雅</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Order(-1)</span></span><br><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">AuthorizationFilter</span> <span class="keyword">implements</span> <span class="title class_">GlobalFilter</span> &#123;</span><br><span class="line">  <span class="meta">@Autowired</span></span><br><span class="line">  UserClient userClient;</span><br><span class="line"></span><br><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">   *</span></span><br><span class="line"><span class="comment">   * <span class="doctag">@param</span> exchange 包含请求头，请求体的信息</span></span><br><span class="line"><span class="comment">   * <span class="doctag">@param</span> chain 过滤器链，若通过过滤器将其放行至下一个过滤器</span></span><br><span class="line"><span class="comment">   * <span class="doctag">@return</span> Mono类型的结果，若通过过滤器只需要返回chain.filter(exchange)即可</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line"></span><br><span class="line">  <span class="meta">@Override</span></span><br><span class="line">  <span class="keyword">public</span> Mono&lt;Void&gt; <span class="title function_">filter</span><span class="params">(ServerWebExchange exchange, GatewayFilterChain chain)</span> &#123;</span><br><span class="line">    <span class="comment">//  获取请求</span></span><br><span class="line">    <span class="type">ServerHttpRequest</span> <span class="variable">request</span> <span class="operator">=</span> exchange.getRequest();</span><br><span class="line">    <span class="comment">//  从请求中获取请求头</span></span><br><span class="line">    <span class="type">HttpHeaders</span> <span class="variable">headers</span> <span class="operator">=</span> request.getHeaders();</span><br><span class="line">    <span class="comment">//  从请求中获取参数</span></span><br><span class="line"><span class="comment">//    MultiValueMap&lt;String, String&gt; params = request.getQueryParams();</span></span><br><span class="line">    <span class="comment">//  请求路径</span></span><br><span class="line">    <span class="type">String</span> <span class="variable">requestPath</span> <span class="operator">=</span> request.getURI().getPath();</span><br><span class="line"></span><br><span class="line">    <span class="comment">//  需要token</span></span><br><span class="line">    <span class="keyword">if</span>(tokenShouldCheck(requestPath)) &#123;</span><br><span class="line">      <span class="comment">//  不包含token</span></span><br><span class="line">      <span class="keyword">if</span>(!headers.containsKey(<span class="string">&quot;Authorization&quot;</span>)) &#123;</span><br><span class="line">        <span class="comment">//  身份验证失败，设置状态码</span></span><br><span class="line">        <span class="type">ServerHttpResponse</span> <span class="variable">response</span> <span class="operator">=</span> exchange.getResponse();</span><br><span class="line">        <span class="comment">//  参数是HttpStatus类型的，未登录状态码为401</span></span><br><span class="line">        response.setStatusCode(HttpStatus.UNAUTHORIZED);</span><br><span class="line">        <span class="keyword">return</span> response.setComplete();</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="comment">//  核验token是否有效,以及用户权限能否获取资源</span></span><br><span class="line">      <span class="type">String</span> <span class="variable">token</span> <span class="operator">=</span> headers.getFirst(<span class="string">&quot;Authorization&quot;</span>);</span><br><span class="line">      <span class="comment">//  空token</span></span><br><span class="line">      <span class="keyword">if</span>(token == <span class="literal">null</span>) &#123;</span><br><span class="line">        <span class="comment">//  身份验证失败，设置状态码</span></span><br><span class="line">        <span class="type">ServerHttpResponse</span> <span class="variable">response</span> <span class="operator">=</span> exchange.getResponse();</span><br><span class="line">        <span class="comment">//  参数是HttpStatus类型的，未登录状态码为401</span></span><br><span class="line">        response.setStatusCode(HttpStatus.UNAUTHORIZED);</span><br><span class="line">        <span class="keyword">return</span> response.setComplete();</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="type">Claims</span> <span class="variable">claims</span> <span class="operator">=</span> JwtUtils.getClaimsByToken(token);</span><br><span class="line">      <span class="comment">//  过期</span></span><br><span class="line">      <span class="keyword">if</span>(claims.getExpiration().getTime() &lt; <span class="keyword">new</span> <span class="title class_">Date</span>().getTime()) &#123;</span><br><span class="line">        <span class="comment">//  token过期，设置状态码</span></span><br><span class="line">        <span class="type">ServerHttpResponse</span> <span class="variable">response</span> <span class="operator">=</span> exchange.getResponse();</span><br><span class="line">        response.setStatusCode(HttpStatus.UNAUTHORIZED);</span><br><span class="line">        <span class="keyword">return</span> response.setComplete();</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">      <span class="comment">//  没有过期</span></span><br><span class="line">      <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="type">Integer</span> <span class="variable">id</span> <span class="operator">=</span> Integer.valueOf(claims.getSubject());</span><br><span class="line">        <span class="type">User</span> <span class="variable">user</span> <span class="operator">=</span> userClient.findUserById(id);</span><br><span class="line">        <span class="comment">//  权限不足</span></span><br><span class="line">        <span class="keyword">if</span>(!hasAuthority(user, requestPath)) &#123;</span><br><span class="line">          <span class="type">ServerHttpResponse</span> <span class="variable">response</span> <span class="operator">=</span> exchange.getResponse();</span><br><span class="line">          <span class="comment">//  403权限不足</span></span><br><span class="line">          response.setStatusCode(HttpStatus.FORBIDDEN);</span><br><span class="line">          <span class="keyword">return</span> response.setComplete();</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//  传递给下一个过滤器</span></span><br><span class="line">    <span class="keyword">return</span> chain.filter(exchange);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">public</span> Boolean <span class="title function_">tokenShouldCheck</span><span class="params">(String path)</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> !path.equals(<span class="string">&quot;/users/login&quot;</span>) &amp;&amp; !path.equals(<span class="string">&quot;/users/register&quot;</span>) &amp;&amp; !path.equals(<span class="string">&quot;/users/sendVerifyCode&quot;</span>);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">   * 判断是否有权限访问当前url下的资源</span></span><br><span class="line"><span class="comment">   * <span class="doctag">@param</span> user 用户</span></span><br><span class="line"><span class="comment">   * <span class="doctag">@param</span> requestPath 请求路径</span></span><br><span class="line"><span class="comment">   * <span class="doctag">@return</span> 是否有权限</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  <span class="keyword">public</span> Boolean <span class="title function_">hasAuthority</span><span class="params">(User user, String requestPath)</span> &#123;</span><br><span class="line">    <span class="comment">//  判断管理员权限</span></span><br><span class="line">    <span class="keyword">if</span>(requestPath.equals(<span class="string">&quot;/users&quot;</span>)) &#123;</span><br><span class="line">      <span class="keyword">return</span> user.getIdentity() == Identity.Admin.ordinal();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//  已/users/为开头</span></span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span> (requestPath.startsWith(<span class="string">&quot;/users/&quot;</span>)) &#123;</span><br><span class="line">      <span class="type">String</span> <span class="variable">paramId</span> <span class="operator">=</span> requestPath.split(<span class="string">&quot;/&quot;</span>)[<span class="number">2</span>];</span><br><span class="line">      <span class="type">String</span> <span class="variable">id</span> <span class="operator">=</span> String.valueOf(user.getId());</span><br><span class="line">      <span class="comment">//  id正确</span></span><br><span class="line">      <span class="keyword">if</span>(paramId.equals(id)) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="comment">//  id错误，判断是否有管理权限</span></span><br><span class="line">      <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> user.getIdentity() == Identity.Admin.ordinal();</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//  其他url</span></span><br><span class="line">    <span class="keyword">else</span> &#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h2><p>其他功能以前都写烂了，没什么好说的感觉，不能很好的完成权限认证是我认为这项目开局的败笔😡</p>
+<h1 id="四、酒店模块"><a href="#四、酒店模块" class="headerlink" title="四、酒店模块"></a>四、酒店模块</h1><h2 id="Feign"><a href="#Feign" class="headerlink" title="Feign"></a>Feign</h2><p>这两天几乎遇到的所有难题都和Feign有关，可以说被Feign狠狠拷打了…</p>
+<h3 id="错误一"><a href="#错误一" class="headerlink" title="错误一"></a>错误一</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">feign.codec.DecodeException: Error <span class="keyword">while</span> extracting response <span class="keyword">for</span> <span class="built_in">type</span> [java.util.ArrayList&lt;com.magus.api.entity.Room&gt;] and content <span class="built_in">type</span> [application/json];</span><br></pre></td></tr></table></figure>
+
+<p>这两天见到的最多的就是这句话，然而造成这个错误的原因是多种多样的。</p>
+<p>我第一次遭遇这个错误是返回值不匹配造成的，起因是我在网上看到了和我同样的操作，在Controller中返回自定义的Json类，他说他在修改为Java自封装类型List之后就解决了（其实自定义类完全是可以的，但是需要创建无参构造函数）。因此我进行了尝试，以至于后面改的太乱了，有的地方是JsonResult，有的地方是User，不匹配造成了这个错误。</p>
+<p>然后还有一个原因则是我的Feign中缺少一个配置</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> com.magus.base.config;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.util.stream.Collectors;</span><br><span class="line"><span class="keyword">import</span> org.springframework.beans.factory.ObjectProvider;</span><br><span class="line"><span class="keyword">import</span> org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;</span><br><span class="line"><span class="keyword">import</span> org.springframework.boot.autoconfigure.http.HttpMessageConverters;</span><br><span class="line"><span class="keyword">import</span> org.springframework.context.annotation.Bean;</span><br><span class="line"><span class="keyword">import</span> org.springframework.context.annotation.Configuration;</span><br><span class="line"><span class="keyword">import</span> org.springframework.http.converter.HttpMessageConverter;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * feign的http客户端配置</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">FeignConfig</span> &#123;</span><br><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">   *No qualifying bean of type ‘org.springframework.boot.autoconfigure.http.HttpMessage</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  <span class="meta">@Bean</span></span><br><span class="line">  <span class="meta">@ConditionalOnMissingBean</span></span><br><span class="line">  <span class="keyword">public</span> HttpMessageConverters <span class="title function_">messageConverters</span><span class="params">(ObjectProvider&lt;HttpMessageConverter&lt;?&gt;&gt; converters)</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">HttpMessageConverters</span>(converters.orderedStream().collect(Collectors.toList()));</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>HttpMessageConverters在一些版本中无法被装配，因此我们添加一个Feign的配置类对他进行@Bean装配</p>
+<h3 id="错误二"><a href="#错误二" class="headerlink" title="错误二"></a>错误二</h3><p>这个错误又难找又逆天，网上也搜罗不到相关的信息，我只能一点点的推测来判断。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@FeignClient(value = &quot;roomProvider&quot;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">RoomClient</span> &#123;</span><br><span class="line">  <span class="comment">//  根据id获取room</span></span><br><span class="line">  <span class="meta">@GetMapping(&quot;/rooms/&#123;id&#125;&quot;)</span></span><br><span class="line">  Room <span class="title function_">findRoomById</span><span class="params">(<span class="meta">@PathVariable</span> Integer id)</span>;</span><br><span class="line"></span><br><span class="line">  <span class="comment">//  获取所有room</span></span><br><span class="line">  <span class="meta">@GetMapping(&quot;/rooms&quot;)</span></span><br><span class="line">  ArrayList&lt;Room&gt; <span class="title function_">findAllRooms</span><span class="params">()</span>;</span><br><span class="line"></span><br><span class="line">  <span class="comment">//  根据酒店id获取room</span></span><br><span class="line">  <span class="meta">@GetMapping(&quot;/rooms/roomsOfHotel&quot;)</span></span><br><span class="line">  ArrayList&lt;Room&gt; <span class="title function_">roomsOfHotel</span><span class="params">(<span class="meta">@RequestParam(&quot;hotelId&quot;)</span> Integer hotelId)</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>如果FeignClient中定义的接口需要带参数的话，而且参数本身不是在url上，那么一定要添加注解@RequestParam，不然是无法识别到对应的controller接口的</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@RequestMapping(&quot;roomsOfHotel&quot;)</span></span><br><span class="line"><span class="keyword">public</span> ArrayList&lt;Room&gt; <span class="title function_">roomsOfHotel</span><span class="params">(Integer hotelId)</span> &#123;</span><br><span class="line">  <span class="keyword">return</span> roomService.findRoomByHotel(hotelId);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>可以看到我的controller接口名称，返回值，参数名，一切都是吻合的，但是依然要加@RequestParam注解，不然收获一小时调试hhh</p>
+<h3 id="查询酒店详细信息"><a href="#查询酒店详细信息" class="headerlink" title="查询酒店详细信息"></a>查询酒店详细信息</h3><p>这个函数的实现很好的使用了Feign来跨服务调用</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="keyword">public</span> HotelDetail <span class="title function_">getDetail</span><span class="params">(Integer id)</span> &#123;</span><br><span class="line">  <span class="type">Hotel</span> <span class="variable">hotel</span> <span class="operator">=</span> hotelMapper.selectById(id);</span><br><span class="line">  <span class="comment">//  酒店id</span></span><br><span class="line">  <span class="type">Integer</span> <span class="variable">hotelId</span> <span class="operator">=</span> hotel.getId();</span><br><span class="line">  <span class="type">HotelDetail</span> <span class="variable">detail</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">HotelDetail</span>(hotel);</span><br><span class="line">  <span class="comment">//  设置房间列表</span></span><br><span class="line">  ArrayList&lt;Room&gt; rooms = roomClient.roomsOfHotel(hotelId);</span><br><span class="line">  detail.setRooms(rooms);</span><br><span class="line">  <span class="comment">//  设置设施列表</span></span><br><span class="line">  ArrayList&lt;Facility&gt; facilities = facilityClient.facilitiesOfHotel(hotelId);</span><br><span class="line">  detail.setFacilities(facilities);</span><br><span class="line">  <span class="keyword">return</span> detail;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>设计了一个dto来展示酒店详细信息</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Data</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">HotelDetail</span> &#123;</span><br><span class="line">  <span class="comment">//  酒店地址</span></span><br><span class="line">  <span class="keyword">private</span> String address;</span><br><span class="line">  <span class="comment">//  品牌</span></span><br><span class="line">  <span class="keyword">private</span> String brand;</span><br><span class="line">  <span class="comment">//  商圈</span></span><br><span class="line">  <span class="keyword">private</span> String businessDistrict;</span><br><span class="line">  <span class="comment">//  酒店id</span></span><br><span class="line">  <span class="keyword">private</span> Integer id;</span><br><span class="line">  <span class="comment">//  酒店简介</span></span><br><span class="line">  <span class="keyword">private</span> String introduction;</span><br><span class="line">  <span class="comment">//  酒店名称</span></span><br><span class="line">  <span class="keyword">private</span> String name;</span><br><span class="line">  <span class="comment">//  联系方式</span></span><br><span class="line">  <span class="keyword">private</span> String phone;</span><br><span class="line">  <span class="comment">//  星级</span></span><br><span class="line">  <span class="keyword">private</span> Integer stars;</span><br><span class="line">  <span class="comment">//  设施</span></span><br><span class="line">  ArrayList&lt;Facility&gt; facilities;</span><br><span class="line">  <span class="comment">//  房间列表</span></span><br><span class="line">  ArrayList&lt;Room&gt; rooms;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">public</span> <span class="title function_">HotelDetail</span><span class="params">(Hotel hotel)</span> &#123;</span><br><span class="line">    <span class="built_in">this</span>.stars = hotel.getStars();</span><br><span class="line">    <span class="built_in">this</span>.phone = hotel.getPhone();</span><br><span class="line">    <span class="built_in">this</span>.name = hotel.getName();</span><br><span class="line">    <span class="built_in">this</span>.introduction = hotel.getIntroduction();</span><br><span class="line">    <span class="built_in">this</span>.id = hotel.getId();</span><br><span class="line">    <span class="built_in">this</span>.businessDistrict = hotel.getBusinessDistrict();</span><br><span class="line">    <span class="built_in">this</span>.brand = hotel.getBrand();</span><br><span class="line">    <span class="built_in">this</span>.address = hotel.getAddress();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="五、订单模块"><a href="#五、订单模块" class="headerlink" title="五、订单模块"></a>五、订单模块</h1><h2 id="下单"><a href="#下单" class="headerlink" title="下单"></a>下单</h2><p>下单功能的设计和代码编写过程中都遭遇不少困难。</p>
+<h3 id="设计"><a href="#设计" class="headerlink" title="设计"></a>设计</h3><p>首先是对于库存进行加锁来避免多线程下出现库存负数的情况，在设计方面目前考虑到单服务器部署下使用jvm的synchronized来解决。</p>
+<p>其次是异步方面的设计，要求是“将耗时的操作放到后台，而界面可以显示提示信息，并且响应等的不耐烦的用户的取消操作。”</p>
+<p>前端设计应该需要用到异步和回调，在响应到达之前进入一个正在下单的界面，并且可以选择取消，响应到达则关闭这个界面。针对此，后端需要设计的只是取消这个功能，所以我在数据库设计方面对订单状态增加了一个下单中的状态OrderStatus.CREATING，订单在插入数据库时默认是这个状态。在用户发送取消的请求后，取消服务的实现方面，我首先会对订单的状态进行查询，因为并不确认此时的下单业务是否完成，订单状态可能处于下单中，下单失败，待支付三种状态。如果处于下单中的状态，将其修改为取消状态，是有问题的，因为代表着下单服务中的检查库存、修改订单状态还没有发生，即使将其设置为取消状态，后续也会被覆盖。</p>
+<p>因此我认为比较合理的设计是多次询问订单状态，直至变化为下单失败或待支付，如果多次询问仍为下单中，则抛出取消失败的异常返回给前端。</p>
+<h3 id="Feign-1"><a href="#Feign-1" class="headerlink" title="Feign"></a>Feign</h3><p>在Feign的使用上，之前学习并没有学到参数传递方面的知识点，现在已经弄清楚了。结合上一篇酒店模块中的进行一个整理</p>
+<h4 id="路径中的参数"><a href="#路径中的参数" class="headerlink" title="路径中的参数"></a>路径中的参数</h4><p>当请求路径中代有参数，并且想要将其提取出来，需要使用@PathVariable注解，同时参数名和类型与Controller中保持一致</p>
+<p>FeignClient</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@GetMapping(&quot;/rooms/&#123;id&#125;&quot;)</span></span><br><span class="line">Room <span class="title function_">findRoomById</span><span class="params">(<span class="meta">@PathVariable</span> Integer id)</span>;</span><br></pre></td></tr></table></figure>
+
+<p>Controller</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@RequestMapping(&quot;&#123;id&#125;&quot;)</span></span><br><span class="line"><span class="keyword">public</span> Room <span class="title function_">findRoomById</span><span class="params">(<span class="meta">@PathVariable</span> Integer id)</span> &#123;</span><br><span class="line">  <span class="keyword">return</span> roomService.findRoomById(id);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="方法中的参数"><a href="#方法中的参数" class="headerlink" title="方法中的参数"></a>方法中的参数</h4><p>当接口方法中有参数时，使用@RequestParam注解，同时参数名和类型与Controller中保持一致，Controller中不需要@RequestParam注解</p>
+<p>FeignClient</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@GetMapping(&quot;/rooms/roomsOfHotel&quot;)</span></span><br><span class="line">ArrayList&lt;Room&gt; <span class="title function_">roomsOfHotel</span><span class="params">(<span class="meta">@RequestParam(&quot;hotelId&quot;)</span> Integer hotelId)</span>;</span><br></pre></td></tr></table></figure>
+
+<p>Controller</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@RequestMapping(&quot;roomsOfHotel&quot;)</span></span><br><span class="line"><span class="keyword">public</span> ArrayList&lt;Room&gt; <span class="title function_">roomsOfHotel</span><span class="params">(Integer hotelId)</span> &#123;</span><br><span class="line">  <span class="keyword">return</span> roomService.findRoomByHotel(hotelId);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="方法中自定义类"><a href="#方法中自定义类" class="headerlink" title="方法中自定义类"></a>方法中自定义类</h4><p>当接口方法中想要传递可序列化类时，使用@RequestBody注解，同时参数名和类型与Controller中保持一致，Controller中<strong>需要@RequestBody注解</strong>，很重要，一定要加</p>
+<p>FeignClient</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@GetMapping(&quot;/rooms/updateRoom&quot;)</span></span><br><span class="line">JsonResult <span class="title function_">updateRoom</span><span class="params">(<span class="meta">@RequestBody</span> Room room)</span>;</span><br></pre></td></tr></table></figure>
+
+<p>Controller</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@RequestMapping(&quot;updateRoom&quot;)</span></span><br><span class="line"><span class="keyword">public</span> JsonResult <span class="title function_">updateRoom</span><span class="params">(<span class="meta">@RequestBody</span> Room room)</span> &#123;</span><br><span class="line">  roomService.updateRoom(room);</span><br><span class="line">  <span class="type">JsonResult</span> <span class="variable">result</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">JsonResult</span>(OK);</span><br><span class="line">  result.setMessage(<span class="string">&quot;更新房间信息成功&quot;</span>);</span><br><span class="line">  <span class="keyword">return</span> result;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h3><h4 id="OrderService"><a href="#OrderService" class="headerlink" title="OrderService"></a>OrderService</h4><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="keyword">public</span> String <span class="title function_">addOrder</span><span class="params">(Order order)</span> &#123;</span><br><span class="line">  <span class="type">LocalDate</span> <span class="variable">start</span> <span class="operator">=</span> order.getCheckInDate();</span><br><span class="line">  <span class="type">LocalDate</span> <span class="variable">end</span> <span class="operator">=</span> order.getCheckOutDate();</span><br><span class="line">  <span class="type">long</span> <span class="variable">days</span> <span class="operator">=</span> ChronoUnit.DAYS.between(start, end);</span><br><span class="line">  <span class="comment">//  对预定日期合理性做检查</span></span><br><span class="line">  <span class="keyword">if</span>(days &lt;= <span class="number">0</span>) &#123;</span><br><span class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">OrderDateException</span>(<span class="string">&quot;预定日期错误&quot;</span>);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="comment">//  计算价格</span></span><br><span class="line">  <span class="type">Room</span> <span class="variable">room</span> <span class="operator">=</span> roomClient.findRoomById(order.getRoomId());</span><br><span class="line">  <span class="type">Integer</span> <span class="variable">roomNum</span> <span class="operator">=</span> order.getRoomNum();</span><br><span class="line">  <span class="type">Double</span> <span class="variable">price</span> <span class="operator">=</span> roomNum * days * room.getPrice();</span><br><span class="line">  order.setPrice(price);</span><br><span class="line">  <span class="comment">//  将订单状态设置为下单中并插入数据库</span></span><br><span class="line">  <span class="type">Date</span> <span class="variable">date</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Date</span>();</span><br><span class="line">  order.setCreatedAt(date);</span><br><span class="line">  order.setUpdatedAt(date);</span><br><span class="line">  order.setStatus(OrderStatus.CREATING.ordinal());</span><br><span class="line">  <span class="comment">//  操作数据库</span></span><br><span class="line">  <span class="keyword">if</span>(orderMapper.insert(order) != <span class="number">1</span>) &#123;</span><br><span class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">AddOrderException</span>(<span class="string">&quot;创建订单失败&quot;</span>);</span><br><span class="line">  &#125;</span><br><span class="line">  String result;</span><br><span class="line">  <span class="comment">//  对库存进行核验，如果库存满足则可以下单</span></span><br><span class="line">  <span class="keyword">if</span>(checkStorage(room.getId(), roomNum)) &#123;</span><br><span class="line">    <span class="comment">//  下单成功</span></span><br><span class="line">    order.setStatus(OrderStatus.UNPAID.ordinal());</span><br><span class="line">    result = <span class="string">&quot;订单待支付&quot;</span>;</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="comment">//  库存不满足,订单状态设置为失败</span></span><br><span class="line">    order.setStatus(OrderStatus.FAIL.ordinal());</span><br><span class="line">    result = <span class="string">&quot;下单失败，库存不足&quot;</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="comment">//  对状态进行更新</span></span><br><span class="line">  <span class="keyword">if</span>(orderMapper.update(order) != <span class="number">1</span>) &#123;</span><br><span class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">UpdateOrderException</span>(<span class="string">&quot;更新订单状态失败&quot;</span>);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> result;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@Override</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">cancel</span><span class="params">(Integer id)</span> &#123;</span><br><span class="line">  <span class="comment">//  对订单状态进行检查</span></span><br><span class="line">  <span class="type">Order</span> <span class="variable">order</span> <span class="operator">=</span> orderMapper.selectById(id);</span><br><span class="line">  <span class="comment">//  仍处在下单中的无法进行取消，必须等待状态变为失败或未支付</span></span><br><span class="line">  <span class="keyword">while</span>(order.getStatus() == OrderStatus.CREATING.ordinal()) &#123;</span><br><span class="line">    order = orderMapper.selectById(id);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="comment">//  跳出循环则订单状态理论上变为失败和未支付</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">//  下单成功处于未支付状态，取消订单需要还原库存</span></span><br><span class="line">  <span class="keyword">if</span>(order.getStatus() != OrderStatus.FAIL.ordinal()) &#123;</span><br><span class="line">    <span class="comment">//  不是失败也不是未支付，状态错误</span></span><br><span class="line">    <span class="keyword">if</span>(order.getStatus() != OrderStatus.UNPAID.ordinal()) &#123;</span><br><span class="line">      <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">OrderStatusException</span>(<span class="string">&quot;订单状态错误&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//  未支付房间库存还原(这里应该使用事务)</span></span><br><span class="line">    <span class="type">Room</span> <span class="variable">room</span> <span class="operator">=</span> roomClient.findRoomById(order.getRoomId());</span><br><span class="line">    room.setNum(room.getNum() + order.getRoomNum());</span><br><span class="line">    roomClient.updateRoom(room);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="comment">//  下单失败无需还原房间库存，状态设置为取消下单即可</span></span><br><span class="line">  order.setStatus(OrderStatus.CANCEL.ordinal());</span><br><span class="line">  <span class="keyword">if</span>(orderMapper.update(order) != <span class="number">1</span>) &#123;</span><br><span class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">UpdateOrderException</span>(<span class="string">&quot;取消订单失败&quot;</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">synchronized</span> Boolean <span class="title function_">checkStorage</span><span class="params">(Integer roomId, Integer roomNum)</span> &#123;</span><br><span class="line">  <span class="comment">//  绝对的低效率</span></span><br><span class="line">  <span class="type">Room</span> <span class="variable">room</span> <span class="operator">=</span> roomClient.findRoomById(roomId);</span><br><span class="line">  <span class="keyword">if</span>(room.getNum() &gt;= roomNum) &#123;</span><br><span class="line">    room.setNum(room.getNum() - roomNum);</span><br><span class="line">    <span class="type">JsonResult</span> <span class="variable">result</span> <span class="operator">=</span> roomClient.updateRoom(room);</span><br><span class="line">    <span class="comment">//  库存充足</span></span><br><span class="line">    <span class="keyword">return</span> result.getCode() == <span class="number">200</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="comment">//  库存不足</span></span><br><span class="line">  <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>只能说都能达到想要的效果，但是效率都不够高，多次的访问数据库进行查询就意味着效率的低下。另外就是cancel中询问订单状态应该设置一定的重试次数，使用while循环是有死循环的风险的（我这里图省事了hhh）</p>
+<h1 id="六、总结"><a href="#六、总结" class="headerlink" title="六、总结"></a>六、总结</h1><h2 id="前端"><a href="#前端" class="headerlink" title="前端"></a>前端</h2><p>前端可以说完全没做，除了flask用了一些别人写好的模板，用了一下bootstrap和jQuery，可以说是很简陋。如果有机会的话想学习一下React，之前有过Vue的入门经历，还是想对这些东西都有个初步的认识（最好都能看懂），为了在以后的前后端沟通中更加方便吧</p>
+<h2 id="后端"><a href="#后端" class="headerlink" title="后端"></a>后端</h2><h3 id="Java"><a href="#Java" class="headerlink" title="Java"></a>Java</h3><p>通过这个项目自主学习和实践了一下SpringCloud的基本用法，包括Nacos，Eureka，GateWay，Feign等。也在实践中理解了一些新的概念，像是负载均衡，反向代理等。</p>
+<p>美中不足的是没有做服务熔断降级这一块，原计划是再对Sentinel进行一下学习然后使用到这个项目中的；同时MQ和Redis也没有用到，除了使用JVM处理并发以外的其他方法也没有尝试，像用Zookeeper的锁，用乐观锁悲观锁这些都没有尝试，有机会希望都能把这些知识补上</p>
+<h3 id="Python"><a href="#Python" class="headerlink" title="Python"></a>Python</h3><p>通过这个项目也是把python开发实践了一下，之前只做过简单的爬虫，或者是小模型的训练，没有做过Web应用这方面的。Flask框架确实很方便，配合jinja2可以很快速的搭建一些简易的平台，在前端中直接使用Python语句确实很爽。但是现在主流还是前后端分离吧，专业的人干专业的事，前端还是掌握的太少了。</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="http://geo0426.github.io">Geo0426</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://geo0426.github.io/2023/09/13/%E5%9F%BA%E4%BA%8EFlask%E4%B8%8ESpringCloud%E7%9A%84%E9%85%92%E5%BA%97%E7%AE%A1%E7%90%86%E7%B3%BB%E7%BB%9F/">http://geo0426.github.io/2023/09/13/%E5%9F%BA%E4%BA%8EFlask%E4%B8%8ESpringCloud%E7%9A%84%E9%85%92%E5%BA%97%E7%AE%A1%E7%90%86%E7%B3%BB%E7%BB%9F/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://geo0426.github.io" target="_blank">Geo0426</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/SpringCloud/">SpringCloud</a><a class="post-meta__tags" href="/tags/Flask/">Flask</a></div><div class="post_share"><div class="social-share" data-image="https://s2.loli.net/2023/09/13/qO2EQMvgHlJyaWj.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2023/11/20/%E8%88%B9%E8%88%B6%E5%B1%80%E9%83%A8%E8%B7%AF%E5%BE%84%E8%A7%84%E5%88%92%E7%AE%97%E6%B3%95/" title="船舶局部路径规划算法"><img class="cover" src="https://s2.loli.net/2023/11/20/Hq85uTxt9NmZwiR.webp" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">船舶局部路径规划算法</div></div></a></div><div class="next-post pull-right"><a href="/2023/09/13/Flask%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5%E4%B8%8E%E4%BD%BF%E7%94%A8%E6%96%B9%E6%B3%95/" title="Flask的基本概念与使用方法"><img class="cover" src="https://s2.loli.net/2023/09/13/P3HY2k5raOWNs4z.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">Flask的基本概念与使用方法</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2023/08/30/SpringCloud%20Eureka%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5%E4%B8%8E%E5%BA%94%E7%94%A8/" title="SpringCloud Eureka的基本概念与应用"><img class="cover" src="https://s2.loli.net/2023/08/30/hvJMROAejz2EQ1i.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-08-30</div><div class="title">SpringCloud Eureka的基本概念与应用</div></div></a></div><div><a href="/2023/09/02/SpringCloud%20GateWay%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5%E4%B8%8E%E5%BA%94%E7%94%A8/" title="SpringCloud GateWay的基本概念与应用"><img class="cover" src="https://s2.loli.net/2023/09/02/gt2m9QGc8XOeMul.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-09-02</div><div class="title">SpringCloud GateWay的基本概念与应用</div></div></a></div><div><a href="/2023/09/02/SpringCloud%20Feign%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5%E4%B8%8E%E5%BA%94%E7%94%A8/" title="SpringCloud Feign的基本概念与应用"><img class="cover" src="https://s2.loli.net/2023/09/02/dCeQOAlhJNWV2zr.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-09-02</div><div class="title">SpringCloud Feign的基本概念与应用</div></div></a></div><div><a href="/2023/09/01/SpringCloud%20Nacos%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5%E4%B8%8E%E5%BA%94%E7%94%A8/" title="SpringCloud Nacos的基本概念与应用"><img class="cover" src="https://s2.loli.net/2023/09/01/afS6dJOkCmrbFx3.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-09-01</div><div class="title">SpringCloud Nacos的基本概念与应用</div></div></a></div><div><a href="/2023/08/30/SpringCloud%20Ribbon%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5%E4%B8%8E%E5%BA%94%E7%94%A8/" title="SpringCloud Ribbon的基本概念与应用"><img class="cover" src="https://s2.loli.net/2023/08/30/GQWFK2PX53lM6LR.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-08-30</div><div class="title">SpringCloud Ribbon的基本概念与应用</div></div></a></div><div><a href="/2023/09/13/Flask%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5%E4%B8%8E%E4%BD%BF%E7%94%A8%E6%96%B9%E6%B3%95/" title="Flask的基本概念与使用方法"><img class="cover" src="https://s2.loli.net/2023/09/13/P3HY2k5raOWNs4z.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-09-13</div><div class="title">Flask的基本概念与使用方法</div></div></a></div></div></div><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="lv-container" data-id="city" data-uid="MTAyMC81ODk0Mi8zNTQwNA=="></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/img/avater.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">Geo0426</div><div class="author-info__description">Record daily learning</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">14</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">18</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">9</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/Geo0426"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/Geo0426" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="mailto:hujunchi0426@163.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">欢迎来到我的博客</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%89%8D%E8%A8%80"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E5%89%8D%E8%A8%80"><span class="toc-number">2.</span> <span class="toc-text">一、前言</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E8%AE%BE%E8%AE%A1"><span class="toc-number">3.</span> <span class="toc-text">二、设计</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A8%A1%E5%9D%97%E8%AE%BE%E8%AE%A1"><span class="toc-number">3.1.</span> <span class="toc-text">模块设计</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#UML"><span class="toc-number">3.2.</span> <span class="toc-text">UML</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1"><span class="toc-number">3.2.1.</span> <span class="toc-text">数据库设计</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#t-user"><span class="toc-number">3.2.1.1.</span> <span class="toc-text">t_user</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#t-hotel"><span class="toc-number">3.2.1.2.</span> <span class="toc-text">t_hotel</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#t-order"><span class="toc-number">3.2.1.3.</span> <span class="toc-text">t_order</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#t-room"><span class="toc-number">3.2.1.4.</span> <span class="toc-text">t_room</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#t-facilities"><span class="toc-number">3.2.1.5.</span> <span class="toc-text">t_facilities</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#t-hotel-facilities"><span class="toc-number">3.2.1.6.</span> <span class="toc-text">t_hotel_facilities</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%B1%BB%E5%9B%BE"><span class="toc-number">3.2.2.</span> <span class="toc-text">类图</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%89-%E3%80%81%E7%94%A8%E6%88%B7%E6%A8%A1%E5%9D%97"><span class="toc-number">4.</span> <span class="toc-text">三 、用户模块</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9D%83%E9%99%90%E8%AE%A4%E8%AF%81"><span class="toc-number">4.1.</span> <span class="toc-text">权限认证</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B6%E4%BB%96"><span class="toc-number">4.2.</span> <span class="toc-text">其他</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E9%85%92%E5%BA%97%E6%A8%A1%E5%9D%97"><span class="toc-number">5.</span> <span class="toc-text">四、酒店模块</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Feign"><span class="toc-number">5.1.</span> <span class="toc-text">Feign</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%94%99%E8%AF%AF%E4%B8%80"><span class="toc-number">5.1.1.</span> <span class="toc-text">错误一</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%94%99%E8%AF%AF%E4%BA%8C"><span class="toc-number">5.1.2.</span> <span class="toc-text">错误二</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9F%A5%E8%AF%A2%E9%85%92%E5%BA%97%E8%AF%A6%E7%BB%86%E4%BF%A1%E6%81%AF"><span class="toc-number">5.1.3.</span> <span class="toc-text">查询酒店详细信息</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%94%E3%80%81%E8%AE%A2%E5%8D%95%E6%A8%A1%E5%9D%97"><span class="toc-number">6.</span> <span class="toc-text">五、订单模块</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%8B%E5%8D%95"><span class="toc-number">6.1.</span> <span class="toc-text">下单</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AE%BE%E8%AE%A1"><span class="toc-number">6.1.1.</span> <span class="toc-text">设计</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Feign-1"><span class="toc-number">6.1.2.</span> <span class="toc-text">Feign</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%B7%AF%E5%BE%84%E4%B8%AD%E7%9A%84%E5%8F%82%E6%95%B0"><span class="toc-number">6.1.2.1.</span> <span class="toc-text">路径中的参数</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%96%B9%E6%B3%95%E4%B8%AD%E7%9A%84%E5%8F%82%E6%95%B0"><span class="toc-number">6.1.2.2.</span> <span class="toc-text">方法中的参数</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%96%B9%E6%B3%95%E4%B8%AD%E8%87%AA%E5%AE%9A%E4%B9%89%E7%B1%BB"><span class="toc-number">6.1.2.3.</span> <span class="toc-text">方法中自定义类</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%A3%E7%A0%81"><span class="toc-number">6.1.3.</span> <span class="toc-text">代码</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#OrderService"><span class="toc-number">6.1.3.1.</span> <span class="toc-text">OrderService</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%85%AD%E3%80%81%E6%80%BB%E7%BB%93"><span class="toc-number">7.</span> <span class="toc-text">六、总结</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%89%8D%E7%AB%AF"><span class="toc-number">7.1.</span> <span class="toc-text">前端</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%90%8E%E7%AB%AF"><span class="toc-number">7.2.</span> <span class="toc-text">后端</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Java"><span class="toc-number">7.2.1.</span> <span class="toc-text">Java</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Python"><span class="toc-number">7.2.2.</span> <span class="toc-text">Python</span></a></li></ol></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2024/11/19/C++%E4%B8%AD%E5%B8%B8%E8%A7%81%E7%9A%84STL%E7%BB%84%E4%BB%B6%E5%8F%8A%E7%9B%B8%E5%85%B3%E5%87%BD%E6%95%B0/" title="C++中常见的STL组件及相关函数"><img src="https://s2.loli.net/2024/11/21/AiMCg4r1TwkVONa.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="C++中常见的STL组件及相关函数"/></a><div class="content"><a class="title" href="/2024/11/19/C++%E4%B8%AD%E5%B8%B8%E8%A7%81%E7%9A%84STL%E7%BB%84%E4%BB%B6%E5%8F%8A%E7%9B%B8%E5%85%B3%E5%87%BD%E6%95%B0/" title="C++中常见的STL组件及相关函数">C++中常见的STL组件及相关函数</a><time datetime="2024-11-19T01:46:50.000Z" title="发表于 2024-11-19 09:46:50">2024-11-19</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/10/09/2024%E6%98%A5%E6%8B%9B%E5%86%B2%E5%88%BA%E7%99%BE%E9%A2%98/" title="2024春招冲刺百题"><img src="https://s2.loli.net/2024/10/09/GYABsLJmzQ6PwDH.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="2024春招冲刺百题"/></a><div class="content"><a class="title" href="/2024/10/09/2024%E6%98%A5%E6%8B%9B%E5%86%B2%E5%88%BA%E7%99%BE%E9%A2%98/" title="2024春招冲刺百题">2024春招冲刺百题</a><time datetime="2024-10-09T12:27:50.000Z" title="发表于 2024-10-09 20:27:50">2024-10-09</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/06/06/Csharp%E5%B8%B8%E8%A7%81%E6%A6%82%E5%BF%B5%E4%B8%8E%E5%B8%B8%E7%94%A8%E8%AF%AD%E6%B3%95/" title="C#常见概念与常用语法"><img src="https://s2.loli.net/2024/08/29/RUKrfsYxPF7pbAO.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="C#常见概念与常用语法"/></a><div class="content"><a class="title" href="/2024/06/06/Csharp%E5%B8%B8%E8%A7%81%E6%A6%82%E5%BF%B5%E4%B8%8E%E5%B8%B8%E7%94%A8%E8%AF%AD%E6%B3%95/" title="C#常见概念与常用语法">C#常见概念与常用语法</a><time datetime="2024-06-06T14:47:50.000Z" title="发表于 2024-06-06 22:47:50">2024-06-06</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/11/21/DWA-path-planning-algorithm/" title="DWA path planning algorithm"><img src="https://s2.loli.net/2024/08/29/B4xrwhDAez9ygc1.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="DWA path planning algorithm"/></a><div class="content"><a class="title" href="/2023/11/21/DWA-path-planning-algorithm/" title="DWA path planning algorithm">DWA path planning algorithm</a><time datetime="2023-11-21T08:05:02.000Z" title="发表于 2023-11-21 16:05:02">2023-11-21</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/11/21/A-path-planning-algorithm/" title="A* path planning algorithm"><img src="https://s2.loli.net/2023/11/21/5SObuFlhmEaB1Pf.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="A* path planning algorithm"/></a><div class="content"><a class="title" href="/2023/11/21/A-path-planning-algorithm/" title="A* path planning algorithm">A* path planning algorithm</a><time datetime="2023-11-21T03:48:53.000Z" title="发表于 2023-11-21 11:48:53">2023-11-21</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2024 By Geo0426</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"><script>if (!window.MathJax) {
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      tags: 'ams'
+    },
+    chtml: {
+      scale: 1.1
+    },
+    options: {
+      renderActions: {
+        findScript: [10, doc => {
+          for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+            const display = !!node.type.match(/; *mode=display/)
+            const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display)
+            const text = document.createTextNode('')
+            node.parentNode.replaceChild(text, node)
+            math.start = {node: text, delim: '', n: 0}
+            math.end = {node: text, delim: '', n: 0}
+            doc.math.push(math)
+          }
+        }, '']
+      }
+    }
+  }
+  
+  const script = document.createElement('script')
+  script.src = 'https://cdn.jsdelivr.net/npm/mathjax/es5/tex-mml-chtml.min.js'
+  script.id = 'MathJax-script'
+  script.async = true
+  document.head.appendChild(script)
+} else {
+  MathJax.startup.document.state(0)
+  MathJax.texReset()
+  MathJax.typesetPromise()
+}</script><script>function loadLivere () {
+  if (typeof LivereTower === 'object') {
+    window.LivereTower.init()
+  }
+  else {
+    (function(d, s) {
+        var j, e = d.getElementsByTagName(s)[0];
+        if (typeof LivereTower === 'function') { return; }
+        j = d.createElement(s);
+        j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+        j.async = true;
+        e.parentNode.insertBefore(j, e);
+    })(document, 'script');
+  }
+}
+
+if ('Livere' === 'Livere' || !false) {
+  if (false) btf.loadComment(document.getElementById('lv-container'), loadLivere)
+  else loadLivere()
+}
+else {
+  function loadOtherComment () {
+    loadLivere()
+  }
+}</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div class="no-result" id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>
